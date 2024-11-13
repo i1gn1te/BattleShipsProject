@@ -11,7 +11,7 @@ Player::Player(Board &ownBoard, int playerNumber) {
 }
 
 void clearScreen() {
-    system("cls");  // Use "clear" for Unix/Linux
+    system("cls");
 }
 
 void Player::placeShips() {
@@ -61,10 +61,9 @@ void Player::placeShips() {
                 validInput = true;
             }
             
-            // Clear buffer before reading direction
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             
-            // Get direction
+
             validInput = false;
             while (!validInput) {
                 cout << "Podaj kierunek (U - w gore, D - w dol, L - w lewo, R - w prawo): ";
