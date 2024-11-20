@@ -1,6 +1,7 @@
 #include "board.h"
 #include <iostream>
 #include <vector>
+#include "../ship/ship.cc"
 using namespace std;
 
 Board::Board() {
@@ -134,6 +135,7 @@ bool Board::canPlaceShip(int y, int x, int size, char direction) const {
 bool Board::placeShip(int y, int x, int size, char direction) {
     if(!canPlaceShip(y, x, size, direction)) return false;
     
+    Ship newShip(size);
     for(int i = 0; i < size; i++) {
         int newY = y, newX = x;
         
@@ -143,7 +145,9 @@ bool Board::placeShip(int y, int x, int size, char direction) {
         else if(direction == 'R') newX = x + i;
         
         board[newY][newX] = 'S';
+        newShip.addPosition(newY, newX);
     }
+    ships.push_back(newShip);
     return true;
 }
 
@@ -183,7 +187,14 @@ void Board::displayBoard(bool hideShips) const
 }
 
 bool Board::isHit(int y, int x) const {
-    return isValidPosition(y, x) && board[y][x] == 'S';
+    if (!isValidPosition(y, x)) return false;
+    
+    for (const Ship& ship : ships) {
+        if (ship.isHit(y, x)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool Board::isAttacked(int y, int x) const {

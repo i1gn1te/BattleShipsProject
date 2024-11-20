@@ -8,7 +8,7 @@ using namespace std;
 class Player
 {
     private:
-    Board ownBoard;
+    Board& ownBoard;
     Board targetBoard;
     int playerNumber;
     string playerName;

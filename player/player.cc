@@ -4,10 +4,8 @@
 #include <stdlib.h>
 using namespace std;
 
-Player::Player(Board &ownBoard, int playerNumber) {
-    this->ownBoard = ownBoard;
-    this->targetBoard = Board();
-    this->playerNumber = playerNumber;
+Player::Player(Board& ownBoard, int playerNumber) 
+    : ownBoard(ownBoard), targetBoard(), playerNumber(playerNumber) {
 }
 
 void clearScreen() {
@@ -96,6 +94,7 @@ void Player::placeShips() {
 bool Player::attack(Player &opponent) {
     bool gameWon = false;
     bool hit = false;
+    bool validAttack = false;
     
     do {
         clearScreen();
@@ -108,8 +107,8 @@ bool Player::attack(Player &opponent) {
         while (!validInput) {
             cout << "\nPodaj wspolrzedne ataku:\ny: ";
             if (!(cin >> y)) {
-                cin.clear(); // Clear error flags
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Nieprawidlowe wspolrzedne! Podaj liczbe od 1 do 10." << endl;
                 continue;
             }
@@ -122,10 +121,8 @@ bool Player::attack(Player &opponent) {
                 continue;
             }
             
-            // Clear any remaining characters in the input buffer
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             
-            // Validate coordinate range
             if (x < 1 || x > 10 || y < 1 || y > 10) {
                 cout << "Wspolrzedne poza plansza! Podaj liczby od 1 do 10." << endl;
                 continue;
@@ -141,6 +138,7 @@ bool Player::attack(Player &opponent) {
             continue;
         }
         
+        validAttack = true;
         hit = opponent.ownBoard.isHit(y, x);
         if(hit) {
             opponent.ownBoard.markHit(y, x);
@@ -149,7 +147,6 @@ bool Player::attack(Player &opponent) {
             
             if (opponent.ownBoard.isShipSunk(y, x)) {
                 cout << "\n!!! TRAFIONY ZATOPIONY !!!" << endl;
-                // Copy the missed marks to the target board
                 for(int dy = -1; dy <= 1; dy++) {
                     for(int dx = -1; dx <= 1; dx++) {
                         int newY = y + dy;
@@ -160,9 +157,7 @@ bool Player::attack(Player &opponent) {
                         }
                     }
                 }
-                // Mark surroundings on opponent's board
                 opponent.ownBoard.markSurroundingCells(y, x);
-                // Mark surroundings on player's target board
                 targetBoard.markSurroundingCells(y, x);
             } else {
                 cout << "\n!!! TRAFIONY !!!" << endl;
@@ -185,7 +180,7 @@ bool Player::attack(Player &opponent) {
         cout << "\nNacisnij ENTER, aby kontynuowac...";
         cin.get();
         
-    } while (hit && !gameWon);
+    } while ((hit || !validAttack) && !gameWon);
     
     return gameWon;
 }

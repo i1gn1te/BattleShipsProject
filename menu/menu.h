@@ -10,6 +10,7 @@ public:
     void continuousGame();
     void displayRestartMenu();
     void displayRestartMenuSingleGame();
+    static void switchPlayers();
 private:
     int player1Wins;
     int player2Wins;

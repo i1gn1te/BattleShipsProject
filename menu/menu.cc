@@ -74,7 +74,7 @@ void Menu::startGame() {
             gameOn = false;
             displayRestartMenuSingleGame();
         }
-
+        switchPlayers();
         cout << "Tura gracza: \n" << player2Name << ".\n";
         player2.displayBoards();
         player2.attack(player1);
@@ -84,6 +84,7 @@ void Menu::startGame() {
             gameOn = false;
             displayRestartMenuSingleGame();
         }
+        switchPlayers();
     }
 }
 
@@ -125,4 +126,16 @@ void Menu::continuousGame() {
         startGame();
         displayRestartMenu();
     } while (false); // Loop is controlled by displayRestartMenu recursion
+}
+
+
+void Menu::switchPlayers() {
+    system("cls");
+    cout << "\n\n";
+    cout << "========================================\n";
+    cout << "           ZMIANA GRACZA!\n";
+    cout << "========================================\n";
+    cout << "\nNacisnij ENTER gdy bedziesz gotowy...";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    system("cls");
 }

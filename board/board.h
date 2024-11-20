@@ -1,5 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
+#include "../ship/ship.cc"
+#include <vector>
 
 class Board {
 public:
@@ -19,6 +21,7 @@ public:
 private:
     static const int BOARD_SIZE = 10;
     char board[BOARD_SIZE + 1][BOARD_SIZE + 1];
+    std::vector<Ship> ships;
     bool canPlaceShip(int y, int x, int size, char direction) const;
 };
 
