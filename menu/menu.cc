@@ -37,11 +37,11 @@ void Menu::displayMainMenu() {
     
     if (choice == 1) {
         startGame();
-    } else if (choice == 2) {
+    } else if(choice == 2)
+    {
         continuousGame();
     }
 }
-
 void Menu::startGame() {
     cout << "\nPodaj nazwe dla gracza 1: ";
     cin.ignore();
@@ -62,7 +62,7 @@ void Menu::startGame() {
     player1.placeShips();
     cout << player2Name << ": Postaw swoje statki." << endl;
     player2.placeShips();
-    
+    switchPlayers();
     bool gameOn = true;
     while (gameOn) {
         cout << "Tura gracza: \n" << player1Name << ".\n";
@@ -72,7 +72,6 @@ void Menu::startGame() {
             cout << player1Name << " wygrywa!\n";
             player1Wins++;
             gameOn = false;
-            displayRestartMenuSingleGame();
         }
         switchPlayers();
         cout << "Tura gracza: \n" << player2Name << ".\n";
@@ -98,7 +97,8 @@ void Menu::displayRestartMenu() {
     displayScore();
     cout << "\n1. Zagraj ponownie\n";
     cout << "2. Zakoncz gre\n";
-    cout << "Wybierz opcje (1-2): ";
+    cout<<"3. Wroc do menu\n";
+    cout << "Wybierz opcje (1-3): ";
     
     int choice;
     cin >> choice;
@@ -106,6 +106,14 @@ void Menu::displayRestartMenu() {
     if (choice == 1) {
         continuousGame();
     }
+    else if(choice == 2 )
+    {
+        exit(0);
+    }
+    else if(choice == 3){
+        displayMainMenu();
+    }
+
 }
 void Menu::displayRestartMenuSingleGame() {
     cout << "1. Wroc do menu\n";
@@ -122,10 +130,49 @@ void Menu::displayRestartMenuSingleGame() {
 }
 
 void Menu::continuousGame() {
-    do {
-        startGame();
-        displayRestartMenu();
-    } while (false); // Loop is controlled by displayRestartMenu recursion
+        cout << "\nPodaj nazwe dla gracza 1: ";
+    cin.ignore();
+    getline(cin, player1Name);
+    
+    cout << "Podaj nazwe dla gracza 2: ";
+    getline(cin, player2Name);
+    
+    Board board1;
+    Board board2;
+    Player player1(board1, 1);
+    Player player2(board2, 2);
+    
+    player1.setPlayerName(player1Name);
+    player2.setPlayerName(player2Name);
+    
+    cout << player1Name << ": Postaw swoje statki." << endl;
+    player1.placeShips();
+    cout << player2Name << ": Postaw swoje statki." << endl;
+    player2.placeShips();
+    switchPlayers();
+    bool gameOn = true;
+    while (gameOn) {
+        cout << "Tura gracza: \n" << player1Name << ".\n";
+        player1.displayBoards();
+        player1.attack(player2);
+        if (player2.hasLost()) {
+            cout << player1Name << " wygrywa!\n";
+            player1Wins++;
+            gameOn = false;
+            displayRestartMenu();
+        }
+        switchPlayers();
+        cout << "Tura gracza: \n" << player2Name << ".\n";
+        player2.displayBoards();
+        player2.attack(player1);
+        if (player1.hasLost()) {
+            cout << player2Name << " wygrywa!\n";
+            player2Wins++;
+            gameOn = false;
+            displayRestartMenu();
+        }
+        switchPlayers();
+    } // Loop is controlled by displayRestartMenu recursion
 }
 
 
